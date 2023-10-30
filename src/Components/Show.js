@@ -12,7 +12,6 @@ export default function Show(props) {
         data();
       }, [props]);
     const data=async ()=>{
-        console.log("hello")
         setLoading(true)
         let url=`https://api.weatherapi.com/v1/current.json?key=456e762c38964f989a275944232210&q=${props.text}`
         let j=await fetch(url)
@@ -41,7 +40,7 @@ export default function Show(props) {
                     <img className="img-fluid" src={condition.icon} ></img>
                 </div>
                 <h5 className="text-center">Location: {location.name}</h5>
-                <div className='text-center'>Region: {location.region}</div>
+                {location.region && <div className='text-center'>Region: {location.region}</div>}
                 <div className='text-center'>Condition: {condition.text}</div>
                 <div className='text-center'>Temperature: {current.temp_c}&deg;C</div>
                 <div className='text-center'>Wind: {current.wind_kph}km/h</div>
