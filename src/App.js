@@ -11,7 +11,7 @@ function App() {
   <Navbar />
     <h1 className="text-center m-4 mb-4">WELCOME TO EXPRESS WEATHER</h1>
       <Input city={setCity}/>
-      {(city.length!=0) && < Show text={city}/>}
+      {(city.length!==0) && < Show text={city}/>}
     </>
   );
 }
