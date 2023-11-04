@@ -8,6 +8,7 @@ export default function Show(props) {
     const[location,setLocation]=useState({})
     const[condition,setCondition]=useState({})
     const[current,setCurrent]=useState({})
+    const[error,setError]=useState(false)
     useEffect(() => {
         data();
       }, [props]);
@@ -16,10 +17,17 @@ export default function Show(props) {
         let url=`https://api.weatherapi.com/v1/current.json?key=456e762c38964f989a275944232210&q=${props.text}`
         let j=await fetch(url)
         let parse=await j.json();
-        setLocation(parse.location)
-        setCondition(parse.current.condition)
-        setCurrent(parse.current)
-        setLoading(false)
+        if(parse.error){
+          setError(true)
+          setLoading(false)
+        }
+        else{
+          setError(false)
+          setLocation(parse.location)
+          setCondition(parse.current.condition)
+          setCurrent(parse.current)
+          setLoading(false)
+        }
     }
     const weatherStyle={
         border:"2px solid black",
@@ -33,11 +41,11 @@ export default function Show(props) {
   return (
     <div>
       <h1>{loading && <Spinner />}</h1>
-      {!loading && <div id="container-fluid">
+      {!loading &&!error &&  <div id="container-fluid">
         <div className="row p-4">
             <div className="col-sm-12 col-md-8 col-lg-7 mx-auto" style={weatherStyle}>
             <div className='text-center'>
-                    <img className="img-fluid" src={condition.icon} ></img>
+                    <img className="img-fluid" src={condition.icon}></img>
                 </div>
                 <h5 className="text-center">Location: {location.name}</h5>
                 {location.region && <div className='text-center'>Region: {location.region}</div>}
@@ -50,6 +58,10 @@ export default function Show(props) {
             </div>
         </div>
       </div>}
+      {!loading && error && <div className="text-center">
+        <div>
+          <img className='img-fluid' src="https://render.fineartamerica.com/images/rendered/default/greeting-card/images/artworkimages/medium/1/drawing-of-cute-teddy-bear-with-butterfly-anna-abramska.jpg?&targetx=42&targety=-57&imagewidth=615&imageheight=615&modelwidth=700&modelheight=500&backgroundcolor=ffffff&orientation=0" style={{"height":"200px"}}></img></div>
+          <div>NOT ABLE TO FIND</div></div>}
     </div>
   )
 }
